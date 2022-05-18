@@ -1,22 +1,20 @@
 class SportsExpert {
   var image;
   var name;
-  var video;
-  var video_comment;
+  List<Posture>? postures;
+
 
   SportsExpert({
     this.image,
     this.name,
-    this.video,
-    this.video_comment,
+    this.postures,
   });
 
   factory SportsExpert.fromDs(dynamic data) {
     return SportsExpert(
       image: data.data()['story'] ?? '',
       name: data.data()['story'] ?? '',
-      video: data.data()['story'] ?? [],
-      video_comment: data.data()['story'] ?? [],
+      postures: data.data()['story'] ?? [],
     );
   }
 
@@ -24,8 +22,26 @@ class SportsExpert {
     return SportsExpert(
       image: 'this is image',
       name: 'Squat',
-      video: ['first video'],
-      video_comment: ['first video']
+    );
+  }
+}
+
+class Posture {
+  var posture;
+  var postureComment;
+  var posetureImage;
+
+  Posture({
+    this.posture,
+    this.postureComment,
+    this.posetureImage
+  });
+
+  factory Posture.fromDs(dynamic data) {
+    return Posture(
+      posture: data.data()['story'] ?? [],
+      posetureImage: data.data()['story'] ?? [],
+      postureComment: data.data()['story'] ?? [],
     );
   }
 }
