@@ -12,10 +12,10 @@ class PosePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.0
-      ..color = Colors.green;
+    // final paint = Paint()
+    //   ..style = PaintingStyle.stroke
+    //   ..strokeWidth = 4.0
+    //   ..color = Colors.green;
 
     final leftPaint = Paint()
       ..style = PaintingStyle.stroke
@@ -34,15 +34,16 @@ class PosePainter extends CustomPainter {
   
     
     for (final pose in poses) {
-      pose.landmarks.forEach((_, landmark) {
-        canvas.drawCircle(
-            Offset(
-              translateX(landmark.x, rotation, size, absoluteImageSize),
-              translateY(landmark.y, rotation, size, absoluteImageSize),
-            ),
-            1,
-            paint);
-      });
+      // pose.landmarks.forEach((_, landmark) {
+      //   canvas.drawCircle(
+      //       Offset(
+      //         translateX(landmark.x, rotation, size, absoluteImageSize),
+      //         translateY(landmark.y, rotation, size, absoluteImageSize),
+      //       ),
+      //       1,
+      //       pain
+      //   );
+      // });
 
       void paintLine(
           PoseLandmarkType type1, PoseLandmarkType type2, Paint paintType) {
@@ -57,6 +58,8 @@ class PosePainter extends CustomPainter {
       }
       
       //Draw arms
+      paintLine(
+          PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder, leftPaint);
       paintLine(
           PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow, leftPaint);
       paintLine(
