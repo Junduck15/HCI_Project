@@ -17,7 +17,7 @@ class CameraView extends StatefulWidget {
       required this.customPaint,
       this.text,
       required this.onImage,
-      this.initialDirection = CameraLensDirection.back})
+      this.initialDirection = CameraLensDirection.front})
       : super(key: key);
 
   final String title;
@@ -77,28 +77,28 @@ class _CameraViewState extends State<CameraView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          if (_allowPicker)
-            Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: _switchScreenMode,
-                child: Icon(
-                  _mode == ScreenMode.liveFeed
-                      ? Icons.photo_library_outlined
-                      : (Platform.isIOS
-                          ? Icons.camera_alt_outlined
-                          : Icons.camera),
-                ),
-              ),
-            ),
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: Text(widget.title),
+      //   actions: [
+      //     if (_allowPicker)
+      //       Padding(
+      //         padding: EdgeInsets.only(right: 20.0),
+      //         child: GestureDetector(
+      //           onTap: _switchScreenMode,
+      //           child: Icon(
+      //             _mode == ScreenMode.liveFeed
+      //                 ? Icons.photo_library_outlined
+      //                 : (Platform.isIOS
+      //                     ? Icons.camera_alt_outlined
+      //                     : Icons.camera),
+      //           ),
+      //         ),
+      //       ),
+      //   ],
+      // ),
       body: _body(),
-      floatingActionButton: _floatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: _floatingActionButton(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -160,25 +160,25 @@ class _CameraViewState extends State<CameraView> {
             ),
           ),
           if (widget.customPaint != null) widget.customPaint!,
-          Positioned(
-            bottom: 100,
-            left: 50,
-            right: 50,
-            child: Slider(
-              value: zoomLevel,
-              min: minZoomLevel,
-              max: maxZoomLevel,
-              onChanged: (newSliderValue) {
-                setState(() {
-                  zoomLevel = newSliderValue;
-                  _controller!.setZoomLevel(zoomLevel);
-                });
-              },
-              divisions: (maxZoomLevel - 1).toInt() < 1
-                  ? null
-                  : (maxZoomLevel - 1).toInt(),
-            ),
-          )
+          // Positioned(
+          //   bottom: 100,
+          //   left: 50,
+          //   right: 50,
+          //   child: Slider(
+          //     value: zoomLevel,
+          //     min: minZoomLevel,
+          //     max: maxZoomLevel,
+          //     onChanged: (newSliderValue) {
+          //       setState(() {
+          //         zoomLevel = newSliderValue;
+          //         _controller!.setZoomLevel(zoomLevel);
+          //       });
+          //     },
+          //     divisions: (maxZoomLevel - 1).toInt() < 1
+          //         ? null
+          //         : (maxZoomLevel - 1).toInt(),
+          //   ),
+          // )
         ],
       ),
     );
@@ -341,4 +341,24 @@ class _CameraViewState extends State<CameraView> {
 
     widget.onImage(inputImage);
   }
+
+  // Future<void> getPose(PickedFile img) async {
+  //   final inputImage = InputImage.fromFile(File(img.path));
+  //   final poseDetector = GoogleMlKit.vision.poseDetector();
+  //   _poses = await poseDetector.processImage(inputImage);
+  //   _loadImage((File(img.path)));
+  //   tp = '';
+  //   for (Pose pose in _poses!) {
+  //     pose.landmarks.forEach((key, value) {
+  //       print(value.x);
+  //       tp = tp.toString() + value.x.toString();
+  //       poseStreamController.add(tp.toString());
+  //       // pose_x?.add(value.x);
+  //       // pose_y?.add(value.y);
+  //
+  //       print(value.y);
+  //     });
+  //   }
+  //   isPose = true;
+  // }
 }
