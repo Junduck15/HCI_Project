@@ -28,7 +28,7 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.back_hand, color: Colors.black,),
+          icon: Icon(Icons.arrow_back, color: Colors.black,),
         ),
       ),
       body: Container(

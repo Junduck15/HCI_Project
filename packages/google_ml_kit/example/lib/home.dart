@@ -10,11 +10,19 @@ class Home extends StatelessWidget {
         name: 'Squat',
         image: 'squat',
         postures: [
-      Posture(posture: 'Start Position', postureComment: 'Freely hold your hands\nWiden your feed to your shoulder-width\nStraighten your back\nTurn your toes out (between 5~15 degrees)', posetureImage: 'squat1.jpeg'),
+      Posture(posture: 'Start Position', postureComment: 'Freely hold your hands\nWiden your feet to your shoulder-width\nStraighten your back\nTurn your toes out (between 5~15 degrees)', posetureImage: 'squat1.jpeg'),
       Posture(posture: 'Action Pose', postureComment: 'Fully sit down\nPress your heels to the ground\nStraighten your back\nKeep lower back neutral', posetureImage: 'squat2.jpeg'),
     ]),
-    SportsExpert(name: 'Shoulder Press', image: ''),
-    SportsExpert(name: 'Push up', image: ''),
+    SportsExpert(name: 'Shoulder Press', image: 'squat',
+        postures: [
+      Posture(posture: 'Start Position', postureComment: 'Lift your arms and make and make 90 degrees with elbow\nStraighten your back', posetureImage: 'squat1.jpeg'),
+      Posture(posture: 'Action Pose', postureComment: 'Lift your arms\nMake two arms parallel to each other\nRepeat the action', posetureImage: 'squat2.jpeg'),
+        ]),
+    SportsExpert(name: 'Push up',image: 'squat',
+        postures: [
+      Posture(posture: 'Start Position', postureComment: 'First lay down on the ground\nWiden your hands to your shoulder-width\nStraighten your back', posetureImage: 'squat1.jpeg'),
+      Posture(posture: 'Action Pose', postureComment: 'Push your hands to go up\nFully stretch your elbow\nStraighten your back and legs\nRepeat the action', posetureImage: 'squat2.jpeg'),
+        ]),
   ];
 
   @override
