@@ -18,6 +18,8 @@ class PosePainter extends CustomPainter {
     //   ..strokeWidth = 4.0
     //   ..color = Colors.green;
 
+    final Pose sample = samplePoses[0];
+
     final afterPaint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3.0
@@ -34,14 +36,25 @@ class PosePainter extends CustomPainter {
       ..color = Colors.green;
 
     for (final pose in samplePoses) {
+      // pose.landmarks.forEach((_, landmark) {
+      //   canvas.drawCircle(
+      //       Offset(
+      //         translateX(landmark.x, rotation, size, absoluteImageSize),
+      //         translateY(landmark.y, rotation, size, absoluteImageSize),
+      //       ),
+      //       1,
+      //       paint);
+      // });
+
+
       void paintCircle(
           PoseLandmarkType type) {
         final PoseLandmark joint1 = pose.landmarks[type]!;
         canvas.drawCircle(
             Offset(translateX(joint1.x, rotation, size, absoluteImageSize),
                 translateY(joint1.y, rotation, size, absoluteImageSize)),
-            20,
-            samePaint);
+            8,
+            samplePaint);
       }
       void paintLine(
           PoseLandmarkType type1, PoseLandmarkType type2, Paint paintType) {
@@ -54,6 +67,17 @@ class PosePainter extends CustomPainter {
                 translateY(joint2.y, rotation, size, absoluteImageSize)),
             paintType);
       }
+      paintCircle(PoseLandmarkType.leftShoulder);
+      paintCircle(PoseLandmarkType.rightShoulder);
+      paintCircle(PoseLandmarkType.leftElbow);
+      paintCircle(PoseLandmarkType.rightElbow);
+      paintCircle(PoseLandmarkType.leftWrist);
+      paintCircle(PoseLandmarkType.rightWrist);
+      paintCircle(PoseLandmarkType.leftHip);
+      paintCircle(PoseLandmarkType.rightHip);
+      paintCircle(PoseLandmarkType.leftAnkle);
+      paintCircle(PoseLandmarkType.rightAnkle);
+
 
       //Draw Sample arms
       paintLine(
@@ -85,6 +109,18 @@ class PosePainter extends CustomPainter {
   
     
     for (final pose in poses) {
+      void paintCircle(
+          PoseLandmarkType type) {
+        final PoseLandmark sample_joint1 = sample.landmarks[type]!;
+        final PoseLandmark joint1 = pose.landmarks[type]!;
+
+        canvas.drawCircle(
+            Offset(translateX(joint1.x, rotation, size, absoluteImageSize),
+                translateY(joint1.y, rotation, size, absoluteImageSize)),
+            8,
+            sample_joint1 == joint1 ? samePaint : afterPaint);
+      }
+
       void paintLine(
           PoseLandmarkType type1, PoseLandmarkType type2, Paint paintType) {
         final PoseLandmark joint1 = pose.landmarks[type1]!;
@@ -96,6 +132,19 @@ class PosePainter extends CustomPainter {
                 translateY(joint2.y, rotation, size, absoluteImageSize)),
             paintType);
       }
+
+      paintCircle(PoseLandmarkType.leftShoulder);
+      paintCircle(PoseLandmarkType.rightShoulder);
+      paintCircle(PoseLandmarkType.leftElbow);
+      paintCircle(PoseLandmarkType.rightElbow);
+      paintCircle(PoseLandmarkType.leftWrist);
+      paintCircle(PoseLandmarkType.rightWrist);
+      paintCircle(PoseLandmarkType.leftHip);
+      paintCircle(PoseLandmarkType.rightHip);
+      paintCircle(PoseLandmarkType.leftAnkle);
+      paintCircle(PoseLandmarkType.rightAnkle);
+
+
       //Draw arms
       paintLine(
           PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder, afterPaint);

@@ -56,6 +56,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/poses/
     - assets/poses/shoulder_press1.jpeg
     - assets/poses/shoulder_press2.jpeg
     - assets/ml/
