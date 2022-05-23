@@ -11,12 +11,12 @@ class Home extends StatelessWidget {
         image: 'squat',
         postures: [
       Posture(posture: 'Start Position', postureComment: 'Freely hold your hands\nWiden your feet to your shoulder-width\nStraighten your back\nTurn your toes out (between 5~15 degrees)', posetureImage: 'squat1.jpeg'),
-      Posture(posture: 'Action Pose', postureComment: 'Fully sit down\nPress your heels to the ground\nStraighten your back\nKeep lower back neutral', posetureImage: 'squat1.jpeg'),
+      Posture(posture: 'Action Pose', postureComment: 'Fully sit down\nPress your heels to the ground\nStraighten your back\nKeep lower back neutral', posetureImage: 'squat2.jpeg'),
     ]),
     SportsExpert(name: 'Shoulder Press', image: 'squat',
         postures: [
-      Posture(posture: 'Start Position', postureComment: 'Lift your arms and make and make 90 degrees with elbow\nStraighten your back', posetureImage: 'sp1.jpeg'),
-      Posture(posture: 'Action Pose', postureComment: 'Lift your arms\nMake two arms parallel to each other\nRepeat the action', posetureImage: 'sp2.jpeg'),
+      Posture(posture: 'Start Position', postureComment: 'Lift your arms and make and make 90 degrees with elbow\nStraighten your back', posetureImage: 'squat1.jpeg'),
+      Posture(posture: 'Action Pose', postureComment: 'Lift your arms\nMake two arms parallel to each other\nRepeat the action', posetureImage: 'squat2.jpeg'),
         ]),
     SportsExpert(name: 'Push up',image: 'squat',
         postures: [

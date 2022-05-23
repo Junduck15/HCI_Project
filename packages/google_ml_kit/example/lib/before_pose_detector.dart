@@ -92,10 +92,15 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
                           child: Container(
                             height: 270,
                             width: 190,
-                            decoration: BoxDecoration(
-                              color: Colors.lightBlueAccent,
-                              borderRadius: BorderRadius.circular(35)
-                            ),
+                            
+                             child: ClipRRect(
+  borderRadius: BorderRadius.circular(20), // Image border
+  child: SizedBox.fromSize(
+    size: Size.fromRadius(48), // Image radius
+    child:  Image(image: AssetImage(item.posetureImage), fit: BoxFit.fill),
+  ),
+)
+                           
                           ),
                         ), // image part
                         SizedBox(height: 25,),
