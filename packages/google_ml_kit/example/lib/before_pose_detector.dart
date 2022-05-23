@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_ml_kit_example/sports_expert.dart';
+import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:path_provider/path_provider.dart';
 import 'vision_detector_views/detector_views.dart';
 
 
@@ -14,6 +19,16 @@ class BeforePoseDetector extends StatefulWidget {
 
 class _BeforePoseDetectorState extends State<BeforePoseDetector> {
   int currentIndex = 0;
+  List< List<Pose> > processedImage = [];
+  final PoseDetector _imagePoseDetector = PoseDetector(options: PoseDetectorOptions());
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    processImages();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,11 +148,35 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PoseDetectorView()),
+              MaterialPageRoute(builder: (context) => PoseDetectorView(sportsExpert: widget.sportsExpert, processedImage: processedImage,)),
             );
           },
           child: Text('Start', style: TextStyle(color: Colors.white),)
       ),
     );
+  }
+  Future<void> processImages() async{
+    for(var p in widget.sportsExpert.postures!) {
+      print('print poses: ' + p.posetureImage);
+      String imagePath = p.posetureImage;
+
+      var bytes = await rootBundle.load('assets/poses/$imagePath');
+      // print(bytes);
+      //
+      String path = (await getTemporaryDirectory()).path;
+      //
+      File file = File('$path/$imagePath');
+      print('file1: ' + file.path);
+      //
+      await file.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+      print('file2: ' + file.path);
+
+      final inputImage = InputImage.fromFile(file);
+      List<Pose> _poses = await _imagePoseDetector.processImage(inputImage);
+
+      processedImage.add(_poses);
+    }
+    print('Process Image done');
+    print(processedImage.length);
   }
 }

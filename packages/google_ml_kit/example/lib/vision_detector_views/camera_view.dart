@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_ml_kit_example/vision_detector_views/painters/pose_painter.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -96,36 +97,37 @@ class _CameraViewState extends State<CameraView> {
       //       ),
       //   ],
       // ),
-      body: _body(),
+      body: _liveFeedBody(),
       // floatingActionButton: _floatingActionButton(),
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
-  Widget? _floatingActionButton() {
-    if (_mode == ScreenMode.gallery) return null;
-    if (cameras.length == 1) return null;
-    return SizedBox(
-        height: 70.0,
-        width: 70.0,
-        child: FloatingActionButton(
-          child: Icon(
-            Platform.isIOS
-                ? Icons.flip_camera_ios_outlined
-                : Icons.flip_camera_android_outlined,
-            size: 40,
-          ),
-          onPressed: _switchLiveCamera,
-        ));
-  }
+  // Widget? _floatingActionButton() {
+  //   if (_mode == ScreenMode.gallery) return null;
+  //   if (cameras.length == 1) return null;
+  //   return SizedBox(
+  //       height: 70.0,
+  //       width: 70.0,
+  //       child: FloatingActionButton(
+  //         child: Icon(
+  //           Platform.isIOS
+  //               ? Icons.flip_camera_ios_outlined
+  //               : Icons.flip_camera_android_outlined,
+  //           size: 40,
+  //         ),
+  //         onPressed: _switchLiveCamera,
+  //       ));
+  // }
 
   Widget _body() {
     Widget body;
-    if (_mode == ScreenMode.liveFeed) {
+    //if (_mode == ScreenMode.liveFeed) {
       body = _liveFeedBody();
-    } else {
-      body = _galleryBody();
-    }
+    // }
+    // else {
+    //   body = _galleryBody();
+    // }
     return body;
   }
 
@@ -140,6 +142,7 @@ class _CameraViewState extends State<CameraView> {
     // because camera preview size is received as landscape
     // but we're calculating for portrait orientation
     var scale = size.aspectRatio * _controller!.value.aspectRatio;
+    _controller!.setZoomLevel(minZoomLevel);
 
     // to prevent scaling down, invert the value
     if (scale < 1) scale = 1 / scale;
@@ -160,6 +163,11 @@ class _CameraViewState extends State<CameraView> {
             ),
           ),
           if (widget.customPaint != null) widget.customPaint!,
+          Positioned(
+              child: Container(
+
+              )
+          )
           // Positioned(
           //   bottom: 100,
           //   left: 50,
@@ -184,46 +192,46 @@ class _CameraViewState extends State<CameraView> {
     );
   }
 
-  Widget _galleryBody() {
-    return ListView(shrinkWrap: true, children: [
-      _image != null
-          ? SizedBox(
-              height: 400,
-              width: 400,
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Image.file(_image!),
-                  if (widget.customPaint != null) widget.customPaint!,
-                ],
-              ),
-            )
-          : Icon(
-              Icons.image,
-              size: 200,
-            ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: ElevatedButton(
-          child: Text('From Gallery'),
-          onPressed: () => _getImage(ImageSource.gallery),
-        ),
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: ElevatedButton(
-          child: Text('Take a picture'),
-          onPressed: () => _getImage(ImageSource.camera),
-        ),
-      ),
-      if (_image != null)
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-              '${_path == null ? '' : 'Image path: $_path'}\n\n${widget.text ?? ''}'),
-        ),
-    ]);
-  }
+  // Widget _galleryBody() {
+  //   return ListView(shrinkWrap: true, children: [
+  //     _image != null
+  //         ? SizedBox(
+  //             height: 400,
+  //             width: 400,
+  //             child: Stack(
+  //               fit: StackFit.expand,
+  //               children: <Widget>[
+  //                 Image.file(_image!),
+  //                 if (widget.customPaint != null) widget.customPaint!,
+  //               ],
+  //             ),
+  //           )
+  //         : Icon(
+  //             Icons.image,
+  //             size: 200,
+  //           ),
+  //     Padding(
+  //       padding: EdgeInsets.symmetric(horizontal: 16),
+  //       child: ElevatedButton(
+  //         child: Text('From Gallery'),
+  //         onPressed: () => _getImage(ImageSource.gallery),
+  //       ),
+  //     ),
+  //     Padding(
+  //       padding: EdgeInsets.symmetric(horizontal: 16),
+  //       child: ElevatedButton(
+  //         child: Text('Take a picture'),
+  //         onPressed: () => _getImage(ImageSource.camera),
+  //       ),
+  //     ),
+  //     if (_image != null)
+  //       Padding(
+  //         padding: const EdgeInsets.all(16.0),
+  //         child: Text(
+  //             '${_path == null ? '' : 'Image path: $_path'}\n\n${widget.text ?? ''}'),
+  //       ),
+  //   ]);
+  // }
 
   Future _getImage(ImageSource source) async {
     setState(() {
