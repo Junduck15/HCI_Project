@@ -8,20 +8,20 @@ class Home extends StatelessWidget {
   List<SportsExpert> home_sports_experts = [
     SportsExpert(
         name: 'Squat',
-        image: 'squat',
+        image: 'assets/poses/squat.jpeg',
         postures: [
-      Posture(posture: 'Start Position', postureComment: 'Freely hold your hands\nWiden your feet to your shoulder-width\nStraighten your back\nTurn your toes out (between 5~15 degrees)', posetureImage: 'squat1.jpeg'),
-      Posture(posture: 'Action Pose', postureComment: 'Fully sit down\nPress your heels to the ground\nStraighten your back\nKeep lower back neutral', posetureImage: 'squat2.jpeg'),
+      Posture(posture: 'Start Position', postureComment: 'Freely hold your hands\nWiden your feet to your shoulder-width\nStraighten your back\nTurn your toes out (between 5~15 degrees)', posetureImage: 'assets/poses/squat1.jpeg'),
+      Posture(posture: 'Action Pose', postureComment: 'Fully sit down\nPress your heels to the ground\nStraighten your back\nKeep lower back neutral', posetureImage: 'assets/poses/squat2.jpeg'),
     ]),
-    SportsExpert(name: 'Shoulder Press', image: 'squat',
+    SportsExpert(name: 'Shoulder Press', image: 'assets/poses/shoulder_press.jpeg',
         postures: [
-      Posture(posture: 'Start Position', postureComment: 'Lift your arms and make and make 90 degrees with elbow\nStraighten your back', posetureImage: 'sp1.jpeg'),
-      Posture(posture: 'Action Pose', postureComment: 'Lift your arms\nMake two arms parallel to each other\nRepeat the action', posetureImage: 'sp2.jpeg'),
+      Posture(posture: 'Start Position', postureComment: 'Lift your arms and make and make 90 degrees with elbow\nStraighten your back', posetureImage: 'assets/poses/sp1.jpeg'),
+      Posture(posture: 'Action Pose', postureComment: 'Lift your arms\nMake two arms parallel to each other\nRepeat the action', posetureImage: 'assets/poses/sp2.jpeg'),
         ]),
-    SportsExpert(name: 'Push up',image: 'squat',
+    SportsExpert(name: 'Push up',image: 'assets/poses/pushup.jpeg',
         postures: [
-      Posture(posture: 'Start Position', postureComment: 'First lay down on the ground\nWiden your hands to your shoulder-width\nStraighten your back', posetureImage: 'pushup1.jpeg'),
-      Posture(posture: 'Action Pose', postureComment: 'Push your hands to go up\nFully stretch your elbow\nStraighten your back and legs\nRepeat the action', posetureImage: 'pushup2.jpeg'),
+      Posture(posture: 'Start Position', postureComment: 'First lay down on the ground\nWiden your hands to your shoulder-width\nStraighten your back', posetureImage: 'assets/poses/pushup1.jpeg'),
+      Posture(posture: 'Action Pose', postureComment: 'Push your hands to go up\nFully stretch your elbow\nStraighten your back and legs\nRepeat the action', posetureImage: 'assets/poses/pushup2.jpeg'),
         ]),
   ];
 
@@ -61,7 +61,7 @@ class Home extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 20),
                         width: 50,
                         height: 50,
-                        color: Colors.blue,
+                        child: Image(image: AssetImage(home_sports_experts[index].image), fit: BoxFit.fill),
                       ),
                       Expanded(child: Center(child: Text(home_sports_experts[index].name)))
                     ],

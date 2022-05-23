@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -160,11 +161,12 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
       ),
     );
   }
+
   Future<void> processImages() async{
     for(var p in widget.sportsExpert.postures!) {
       print('print poses: ' + p.posetureImage);
       String imagePath = p.posetureImage;
-
+      imagePath = imagePath.substring(13);
       var bytes = await rootBundle.load('assets/poses/$imagePath');
       // print(bytes);
       //
@@ -173,13 +175,32 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
       File file = File('$path/$imagePath');
       print('file1: ' + file.path);
       //
-      await file.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-      print('file2: ' + file.path);
+      await file.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes)).whenComplete(() async{
+        print('file2: ' + file.path);
+        final inputImage = InputImage.fromFile(file);
+        List<Pose> _poses = await _imagePoseDetector.processImage(inputImage);
 
-      final inputImage = InputImage.fromFile(file);
-      List<Pose> _poses = await _imagePoseDetector.processImage(inputImage);
-
-      processedImage.add(_poses);
+        processedImage.add(_poses);
+      });
+      // print('file2: ' + file.path);
+      //
+      // // Resize
+      // ui.instantiateImageCodec(imageData,targetHeight: 800, targetWidth: 600)
+      //     .then((codec) {
+      //   codec.getNextFrame().then((frameInfo) async {
+      //     ui.Image i = frameInfo.image;
+      //     ByteData bytes = await i.toByteData();
+      //     List<int> resizedImageData = bytes.buffer.asUint8List();
+      //     String rb64 = base64Encode(resizedImageData);
+      //     print(rb64); // prints too many backslashes:[k5KO/5qWk/+ZlZL/mpaT/5uXlP+alpP/mJSR/5iUkf+YlJH/mZSR/5uWk/+blpP/n5qX/6GcmP+gm5f/oZyY/6GcmP+fmpb/nZi..
+      //     //If i send rb64 to server then server cannot decode and save it.
+      //   });
+      // });
+      //
+      // final inputImage = InputImage.fromFile(file);
+      // List<Pose> _poses = await _imagePoseDetector.processImage(inputImage);
+      //
+      // processedImage.add(_poses);
     }
     print('Process Image done');
     print(processedImage.length);

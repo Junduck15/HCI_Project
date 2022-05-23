@@ -18,7 +18,8 @@ class CameraView extends StatefulWidget {
       required this.customPaint,
       this.text,
       required this.onImage,
-      this.initialDirection = CameraLensDirection.front})
+      this.initialDirection = CameraLensDirection.front,
+      required this.count})
       : super(key: key);
 
   final String title;
@@ -26,27 +27,24 @@ class CameraView extends StatefulWidget {
   final String? text;
   final Function(InputImage inputImage) onImage;
   final CameraLensDirection initialDirection;
+  int count;
 
   @override
   _CameraViewState createState() => _CameraViewState();
 }
 
 class _CameraViewState extends State<CameraView> {
-  ScreenMode _mode = ScreenMode.liveFeed;
   CameraController? _controller;
-  File? _image;
-  String? _path;
-  ImagePicker? _imagePicker;
   int _cameraIndex = 0;
   double zoomLevel = 0.0, minZoomLevel = 0.0, maxZoomLevel = 0.0;
-  final bool _allowPicker = true;
   bool _changingCameraLens = false;
+
+  int count = 0;
+  bool isDone = false;
 
   @override
   void initState() {
     super.initState();
-
-    _imagePicker = ImagePicker();
 
     if (cameras.any(
       (element) =>
@@ -78,57 +76,8 @@ class _CameraViewState extends State<CameraView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(widget.title),
-      //   actions: [
-      //     if (_allowPicker)
-      //       Padding(
-      //         padding: EdgeInsets.only(right: 20.0),
-      //         child: GestureDetector(
-      //           onTap: _switchScreenMode,
-      //           child: Icon(
-      //             _mode == ScreenMode.liveFeed
-      //                 ? Icons.photo_library_outlined
-      //                 : (Platform.isIOS
-      //                     ? Icons.camera_alt_outlined
-      //                     : Icons.camera),
-      //           ),
-      //         ),
-      //       ),
-      //   ],
-      // ),
       body: _liveFeedBody(),
-      // floatingActionButton: _floatingActionButton(),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
-  }
-
-  // Widget? _floatingActionButton() {
-  //   if (_mode == ScreenMode.gallery) return null;
-  //   if (cameras.length == 1) return null;
-  //   return SizedBox(
-  //       height: 70.0,
-  //       width: 70.0,
-  //       child: FloatingActionButton(
-  //         child: Icon(
-  //           Platform.isIOS
-  //               ? Icons.flip_camera_ios_outlined
-  //               : Icons.flip_camera_android_outlined,
-  //           size: 40,
-  //         ),
-  //         onPressed: _switchLiveCamera,
-  //       ));
-  // }
-
-  Widget _body() {
-    Widget body;
-    //if (_mode == ScreenMode.liveFeed) {
-      body = _liveFeedBody();
-    // }
-    // else {
-    //   body = _galleryBody();
-    // }
-    return body;
   }
 
   Widget _liveFeedBody() {
@@ -163,98 +112,31 @@ class _CameraViewState extends State<CameraView> {
             ),
           ),
           if (widget.customPaint != null) widget.customPaint!,
-          Positioned(
-              child: Container(
 
+          count != 10 ? Positioned(
+            bottom: 100,
+              left: 150,
+              child: Container(
+                child: Text('count: ' + (count/2).toString(), style: TextStyle(color: Colors.black, fontSize: 30))
+              )
+          ) :
+          Positioned(
+              bottom: 100,
+              left: 100,
+              right: 100,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size.fromHeight(40),
+                ),
+                onPressed: () {
+
+                },
+                  child: Text('Well Done!', style: TextStyle(color: Colors.white, fontSize: 20))
               )
           )
-          // Positioned(
-          //   bottom: 100,
-          //   left: 50,
-          //   right: 50,
-          //   child: Slider(
-          //     value: zoomLevel,
-          //     min: minZoomLevel,
-          //     max: maxZoomLevel,
-          //     onChanged: (newSliderValue) {
-          //       setState(() {
-          //         zoomLevel = newSliderValue;
-          //         _controller!.setZoomLevel(zoomLevel);
-          //       });
-          //     },
-          //     divisions: (maxZoomLevel - 1).toInt() < 1
-          //         ? null
-          //         : (maxZoomLevel - 1).toInt(),
-          //   ),
-          // )
         ],
       ),
     );
-  }
-
-  // Widget _galleryBody() {
-  //   return ListView(shrinkWrap: true, children: [
-  //     _image != null
-  //         ? SizedBox(
-  //             height: 400,
-  //             width: 400,
-  //             child: Stack(
-  //               fit: StackFit.expand,
-  //               children: <Widget>[
-  //                 Image.file(_image!),
-  //                 if (widget.customPaint != null) widget.customPaint!,
-  //               ],
-  //             ),
-  //           )
-  //         : Icon(
-  //             Icons.image,
-  //             size: 200,
-  //           ),
-  //     Padding(
-  //       padding: EdgeInsets.symmetric(horizontal: 16),
-  //       child: ElevatedButton(
-  //         child: Text('From Gallery'),
-  //         onPressed: () => _getImage(ImageSource.gallery),
-  //       ),
-  //     ),
-  //     Padding(
-  //       padding: EdgeInsets.symmetric(horizontal: 16),
-  //       child: ElevatedButton(
-  //         child: Text('Take a picture'),
-  //         onPressed: () => _getImage(ImageSource.camera),
-  //       ),
-  //     ),
-  //     if (_image != null)
-  //       Padding(
-  //         padding: const EdgeInsets.all(16.0),
-  //         child: Text(
-  //             '${_path == null ? '' : 'Image path: $_path'}\n\n${widget.text ?? ''}'),
-  //       ),
-  //   ]);
-  // }
-
-  Future _getImage(ImageSource source) async {
-    setState(() {
-      _image = null;
-      _path = null;
-    });
-    final pickedFile = await _imagePicker?.pickImage(source: source);
-    if (pickedFile != null) {
-      _processPickedFile(pickedFile);
-    }
-    setState(() {});
-  }
-
-  void _switchScreenMode() {
-    _image = null;
-    if (_mode == ScreenMode.liveFeed) {
-      _mode = ScreenMode.gallery;
-      _stopLiveFeed();
-    } else {
-      _mode = ScreenMode.liveFeed;
-      _startLiveFeed();
-    }
-    setState(() {});
   }
 
   Future _startLiveFeed() async {
@@ -284,28 +166,6 @@ class _CameraViewState extends State<CameraView> {
     await _controller?.stopImageStream();
     await _controller?.dispose();
     _controller = null;
-  }
-
-  Future _switchLiveCamera() async {
-    setState(() => _changingCameraLens = true);
-    _cameraIndex = (_cameraIndex + 1) % cameras.length;
-
-    await _stopLiveFeed();
-    await _startLiveFeed();
-    setState(() => _changingCameraLens = false);
-  }
-
-  Future _processPickedFile(XFile? pickedFile) async {
-    final path = pickedFile?.path;
-    if (path == null) {
-      return;
-    }
-    setState(() {
-      _image = File(path);
-    });
-    _path = path;
-    final inputImage = InputImage.fromFilePath(path);
-    widget.onImage(inputImage);
   }
 
   Future _processCameraImage(CameraImage image) async {
@@ -349,24 +209,4 @@ class _CameraViewState extends State<CameraView> {
 
     widget.onImage(inputImage);
   }
-
-  // Future<void> getPose(PickedFile img) async {
-  //   final inputImage = InputImage.fromFile(File(img.path));
-  //   final poseDetector = GoogleMlKit.vision.poseDetector();
-  //   _poses = await poseDetector.processImage(inputImage);
-  //   _loadImage((File(img.path)));
-  //   tp = '';
-  //   for (Pose pose in _poses!) {
-  //     pose.landmarks.forEach((key, value) {
-  //       print(value.x);
-  //       tp = tp.toString() + value.x.toString();
-  //       poseStreamController.add(tp.toString());
-  //       // pose_x?.add(value.x);
-  //       // pose_y?.add(value.y);
-  //
-  //       print(value.y);
-  //     });
-  //   }
-  //   isPose = true;
-  // }
 }

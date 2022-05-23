@@ -30,7 +30,8 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
 
   bool _canProcess = true;
   bool _isBusy = false;
-  bool _isSame = false;
+  int count = 0;
+  int sampleIdx = 0;
   CustomPaint? _customPaint;
   String? _text;
   late List< List<Pose> > processedImage;
@@ -58,6 +59,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
       onImage: (inputImage) {
         processImage(inputImage);
       },
+      count: count,
     );
   }
 
@@ -70,21 +72,18 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
     });
     final poses = await _poseDetector.processImage(inputImage);
 
-    // for(int i = 1; i < 6; i++) {
-    //   for(var p in widget.processedImage){
-    //     final painter = PosePainter(p, inputImage.inputImageData!.size,
-    //         inputImage.inputImageData!.imageRotation, Colors.green);
-    //     _customPaint = CustomPaint(painter: painter);
-    //   }
-    // }
-
-
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
 
       final painter = PosePainter(widget.processedImage[0], poses, inputImage.inputImageData!.size,
-          inputImage.inputImageData!.imageRotation);
+          inputImage.inputImageData!.imageRotation, sampleIdx);
       _customPaint = CustomPaint(painter: painter);
+      setState(() {
+        if(painter.isCheckAll()) {
+          count++;
+        }
+        print('count: $count');
+      });
     } else {
       _text = 'Poses found: ${poses.length}\n\n';
       // TODO: set _customPaint to draw landmarks on top of image
