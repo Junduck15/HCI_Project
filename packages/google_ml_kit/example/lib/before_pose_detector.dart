@@ -164,7 +164,7 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
     for(var p in widget.sportsExpert.postures!) {
       print('print poses: ' + p.posetureImage);
       String imagePath = p.posetureImage;
-
+      imagePath = imagePath.substring(13);
       var bytes = await rootBundle.load('assets/poses/$imagePath');
       // print(bytes);
       //
