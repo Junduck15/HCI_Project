@@ -178,9 +178,7 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
       await file.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes)).whenComplete(() async{
         print('file2: ' + file.path);
         final inputImage = InputImage.fromFile(file);
-        List<Pose> _poses = await _imagePoseDetector.processImage(inputImage);
-
-        processedImage.add(_poses);
+        await _imagePoseDetector.processImage(inputImage).then((value) => processedImage.add(value));
       });
       // print('file2: ' + file.path);
       //

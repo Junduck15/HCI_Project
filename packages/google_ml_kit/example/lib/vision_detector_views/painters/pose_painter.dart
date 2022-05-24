@@ -116,19 +116,19 @@ class PosePainter extends CustomPainter {
       bool isSame(PoseLandmark s, PoseLandmark j) {
         bool x = false;
         bool y = false;
-        bool z = false;
+        bool z = true;
 
-        if(j.x+6 >= s.x && j.x-6 <= s.x){
+        if(j.x+50 >= s.x && j.x-50 <= s.x){
           x = true;
         }
-        if(j.y+6 >= s.y && j.y-6 <= s.y){
+        if(j.y+50 >= s.y && j.y-50<= s.y){
           y = true;
         }
-        if(j.z+6 >= s.z && j.z-6 <= s.z){
-          z = true;
-        }
+        // if(j.z+6 >= s.z && j.z-6 <= s.z){
+        //   z = true;
+        // }
 
-        if(x || y || z) {
+        if(x && y && z) {
           return true;
         } else {
           return false;
