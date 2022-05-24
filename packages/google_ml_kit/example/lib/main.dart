@@ -1,6 +1,9 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit_example/home.dart';
+import 'package:provider/provider.dart';
+
+import 'check_provider.dart';
 
 
 
@@ -12,7 +15,12 @@ Future<void> main() async {
 
   cameras = await availableCameras();
 
-  runApp(MyApp());
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CheckPose())
+      ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

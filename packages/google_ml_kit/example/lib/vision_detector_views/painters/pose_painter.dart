@@ -1,28 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:provider/provider.dart';
 
+import '../../check_provider.dart';
 import 'coordinates_translator.dart';
 
 class PosePainter extends CustomPainter {
-  PosePainter(this.samplePoses, this.poses, this.absoluteImageSize, this.rotation, this.sampleIdx);
+  PosePainter(this.samplePoses, this.poses, this.absoluteImageSize, this.rotation, this.context);
 
   final List<Pose> samplePoses;
   final List<Pose> poses;
   final Size absoluteImageSize;
   final InputImageRotation rotation;
-  final int sampleIdx;
-  List<bool> checkAll = [false, false, false, false, false, false, false, false, false, false];
+  BuildContext context;
 
-
-  bool isCheckAll() {
-    bool allSame = true;
-
-    for(var c in checkAll) {
-      allSame = c;
-    }
-
-    return allSame;
-  }
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -31,7 +22,7 @@ class PosePainter extends CustomPainter {
     //   ..strokeWidth = 4.0
     //   ..color = Colors.green;
 
-    Pose sample = samplePoses[sampleIdx];
+    Pose sample = samplePoses[context.read<CheckPose>().sampleIdx];
 
     final afterPaint = Paint()
       ..style = PaintingStyle.stroke
@@ -49,6 +40,7 @@ class PosePainter extends CustomPainter {
       ..color = Colors.green;
 
     for (final pose in samplePoses) {
+      print('pose printing...');
       void paintCircle(
           PoseLandmarkType type) {
         final PoseLandmark joint1 = pose.landmarks[type]!;
@@ -118,17 +110,17 @@ class PosePainter extends CustomPainter {
         bool y = false;
         bool z = false;
 
-        if(j.x+6 >= s.x && j.x-6 <= s.x){
+        if(j.x + 10 >= s.x && j.x - 10 <= s.x){
           x = true;
         }
-        if(j.y+6 >= s.y && j.y-6 <= s.y){
+        if(j.y + 10 >= s.y && j.y - 10 <= s.y){
           y = true;
         }
-        if(j.z+6 >= s.z && j.z-6 <= s.z){
-          z = true;
-        }
+        // if(j.z+6 >= s.z && j.z-6 <= s.z){
+        //   z = true;
+        // }
 
-        if(x || y || z) {
+        if(x || y) {
           return true;
         } else {
           return false;
@@ -139,7 +131,18 @@ class PosePainter extends CustomPainter {
           PoseLandmarkType type, int idx) {
         final PoseLandmark sample_joint1 = sample.landmarks[type]!;
         final PoseLandmark joint1 = pose.landmarks[type]!;
-        if(isSame(sample_joint1, joint1)) checkAll[idx] = true;
+        // print(type.toString() + ": "+ sample_joint1.x.toString() + "= " + joint1.x.toString());
+        if(type.toString() == 'PoseLandmarkType.rightElbow') {
+          print(type.toString() + "x : "+ sample_joint1.x.toString() + "= " + joint1.x.toString());
+          print(type.toString() + "y : "+ sample_joint1.y.toString() + "= " + joint1.y.toString());
+          // print(type.toString() + "z : "+ sample_joint1.z.toString() + "= " + joint1.z.toString());
+        }
+
+        if(isSame(sample_joint1, joint1)) {
+          context.watch<CheckPose>().checkAll[idx] = true;
+          context.read<CheckPose>().isCheckAll();
+          print(joint1.type);
+        }
 
         canvas.drawCircle(
             Offset(translateX(joint1.x, rotation, size, absoluteImageSize),
