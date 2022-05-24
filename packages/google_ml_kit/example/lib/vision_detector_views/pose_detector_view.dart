@@ -36,17 +36,11 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   String? _text;
   late List< List<Pose> > processedImage;
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   processImages();
-  //   super.initState();
-  // }
-
   @override
   void dispose() async {
     _canProcess = false;
     _poseDetector.close();
+
     super.dispose();
   }
 

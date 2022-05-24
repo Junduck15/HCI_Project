@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit_example/sports_expert.dart';
+import 'package:provider/provider.dart';
 import 'before_pose_detector.dart';
 import 'cameraView.dart';
+import 'check_provider.dart';
 import 'vision_detector_views/detector_views.dart';
 
 class Home extends StatelessWidget {
@@ -31,6 +33,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
+        backgroundColor: Colors.white,
         title: const Text(
           'Pocket Trainer',
           style: TextStyle(color: Colors.black),
@@ -49,6 +52,7 @@ class Home extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
+                  context.read<CheckPose>().initState();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => BeforePoseDetector(sportsExpert: home_sports_experts[index])),

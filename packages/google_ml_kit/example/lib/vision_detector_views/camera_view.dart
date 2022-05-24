@@ -111,11 +111,11 @@ class _CameraViewState extends State<CameraView> {
           ),
           if (widget.customPaint != null) widget.customPaint!,
 
-          context.read<CheckPose>().count != 10 ? Positioned(
+          context.read<CheckPose>().count < 10 ? Positioned(
             bottom: 100,
               left: 150,
               child: Container(
-                child: Text('count: ' + (context.read<CheckPose>().count/2).toString(), style: TextStyle(color: Colors.black, fontSize: 30))
+                child: Text('count: ' + (context.read<CheckPose>().count/2).toInt().toString(), style: TextStyle(color: Colors.black, fontSize: 30))
               )
           ) :
           Positioned(
