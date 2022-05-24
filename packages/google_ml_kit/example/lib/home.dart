@@ -15,12 +15,12 @@ class Home extends StatelessWidget {
     ]),
     SportsExpert(name: 'Shoulder Press', image: 'assets/poses/shoulder_press.jpeg',
         postures: [
-      Posture(posture: 'Start Position', postureComment: 'Lift your arms and make and make 90 degrees with elbow\nStraighten your back', posetureImage: 'assets/poses/sp1.jpeg'),
-      Posture(posture: 'Action Pose', postureComment: 'Lift your arms\nMake two arms parallel to each other\nRepeat the action', posetureImage: 'assets/poses/sp2.jpeg'),
+      Posture(posture: 'Start Position', postureComment: 'Lift your arms and make and make 90 degrees with elbow\nStraighten your back', posetureImage: 'assets/poses/sp7.jpeg'),
+      Posture(posture: 'Action Pose', postureComment: 'Lift your arms\nMake two arms parallel to each other\nRepeat the action', posetureImage: 'assets/poses/sp8.jpeg'),
         ]),
     SportsExpert(name: 'Push up',image: 'assets/poses/pushup.jpeg',
         postures: [
-      Posture(posture: 'Start Position', postureComment: 'First lay down on the ground\nWiden your hands to your shoulder-width\nStraighten your back', posetureImage: 'assets/poses/pushup1.jpeg'),
+      Posture(posture: 'Start Position', postureComment: 'First lay down on the ground\nWiden your hands to your shoulder-width\nStraighten your back', posetureImage: 'assets/poses/pu1.jpeg'),
       Posture(posture: 'Action Pose', postureComment: 'Push your hands to go up\nFully stretch your elbow\nStraighten your back and legs\nRepeat the action', posetureImage: 'assets/poses/pushup2.jpeg'),
         ]),
   ];

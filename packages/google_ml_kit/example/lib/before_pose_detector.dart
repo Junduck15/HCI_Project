@@ -174,7 +174,7 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
       //
       File file = File('$path/$imagePath');
       print('file1: ' + file.path);
-      //
+
       await file.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes)).whenComplete(() async{
         print('file2: ' + file.path);
         final inputImage = InputImage.fromFile(file);
@@ -183,19 +183,6 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
         processedImage.add(_poses);
       });
       // print('file2: ' + file.path);
-      //
-      // // Resize
-      // ui.instantiateImageCodec(imageData,targetHeight: 800, targetWidth: 600)
-      //     .then((codec) {
-      //   codec.getNextFrame().then((frameInfo) async {
-      //     ui.Image i = frameInfo.image;
-      //     ByteData bytes = await i.toByteData();
-      //     List<int> resizedImageData = bytes.buffer.asUint8List();
-      //     String rb64 = base64Encode(resizedImageData);
-      //     print(rb64); // prints too many backslashes:[k5KO/5qWk/+ZlZL/mpaT/5uXlP+alpP/mJSR/5iUkf+YlJH/mZSR/5uWk/+blpP/n5qX/6GcmP+gm5f/oZyY/6GcmP+fmpb/nZi..
-      //     //If i send rb64 to server then server cannot decode and save it.
-      //   });
-      // });
       //
       // final inputImage = InputImage.fromFile(file);
       // List<Pose> _poses = await _imagePoseDetector.processImage(inputImage);

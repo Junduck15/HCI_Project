@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_ml_kit_example/vision_detector_views/painters/pose_painter.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
+import '../check_provider.dart';
 import '../main.dart';
 
 enum ScreenMode { liveFeed, gallery }
@@ -18,8 +18,7 @@ class CameraView extends StatefulWidget {
       required this.customPaint,
       this.text,
       required this.onImage,
-      this.initialDirection = CameraLensDirection.front,
-      required this.count})
+      this.initialDirection = CameraLensDirection.front})
       : super(key: key);
 
   final String title;
@@ -27,7 +26,6 @@ class CameraView extends StatefulWidget {
   final String? text;
   final Function(InputImage inputImage) onImage;
   final CameraLensDirection initialDirection;
-  int count;
 
   @override
   _CameraViewState createState() => _CameraViewState();
@@ -113,11 +111,11 @@ class _CameraViewState extends State<CameraView> {
           ),
           if (widget.customPaint != null) widget.customPaint!,
 
-          count != 10 ? Positioned(
+          context.read<CheckPose>().count != 10 ? Positioned(
             bottom: 100,
               left: 150,
               child: Container(
-                child: Text('count: ' + (count/2).toString(), style: TextStyle(color: Colors.black, fontSize: 30))
+                child: Text('count: ' + (context.read<CheckPose>().count/2).toString(), style: TextStyle(color: Colors.black, fontSize: 30))
               )
           ) :
           Positioned(
@@ -132,6 +130,27 @@ class _CameraViewState extends State<CameraView> {
 
                 },
                   child: Text('Well Done!', style: TextStyle(color: Colors.white, fontSize: 20))
+              )
+          ),
+          Positioned(
+              top: 100,
+              left: 100,
+              right: 100,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size.fromHeight(40),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      // if(context.watch<CheckPose>().sampleIdx == 0) {
+                      //   context.read<CheckPose>().sampleIdx = 1;
+                      // } else {
+                      //   context.read<CheckPose>().sampleIdx = 0;
+                      // }
+                      context.read<CheckPose>().changePose();
+                    });
+                  },
+                  child: Text('next pose', style: TextStyle(color: Colors.white, fontSize: 20))
               )
           )
         ],
