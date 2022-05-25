@@ -1,8 +1,10 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_ml_kit_example/result.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:provider/provider.dart';
 
@@ -90,7 +92,9 @@ class _CameraViewState extends State<CameraView> {
     // but we're calculating for portrait orientation
     var scale = size.aspectRatio * _controller!.value.aspectRatio;
     _controller!.setZoomLevel(minZoomLevel);
-
+int random(min, max) {
+    return min + Random().nextInt(max - min);
+  }
     // to prevent scaling down, invert the value
     if (scale < 1) scale = 1 / scale;
 
@@ -127,7 +131,8 @@ class _CameraViewState extends State<CameraView> {
                   minimumSize: Size.fromHeight(40),
                 ),
                 onPressed: () {
-
+                    Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Result(random:random(80, 95))));
                 },
                   child: Text('Well Done!', style: TextStyle(color: Colors.white, fontSize: 20))
               )
