@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:provider/provider.dart';
 
+import '../../check_provider.dart';
 import 'coordinates_translator.dart';
 
 class PosePainter extends CustomPainter {
-  PosePainter(this.samplePoses, this.poses, this.absoluteImageSize, this.rotation);
+  PosePainter(this.samplePoses, this.poses, this.absoluteImageSize, this.rotation, this.context);
 
   final List<Pose> samplePoses;
   final List<Pose> poses;
   final Size absoluteImageSize;
   final InputImageRotation rotation;
+  BuildContext context;
+
+  List<bool> checkAll = [false, false, false, false, false, false, false, false, false, false];
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -17,6 +22,8 @@ class PosePainter extends CustomPainter {
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 4.0
     //   ..color = Colors.green;
+
+    Pose sample = samplePoses[0];
 
     final afterPaint = Paint()
       ..style = PaintingStyle.stroke
@@ -40,9 +47,10 @@ class PosePainter extends CustomPainter {
         canvas.drawCircle(
             Offset(translateX(joint1.x, rotation, size, absoluteImageSize),
                 translateY(joint1.y, rotation, size, absoluteImageSize)),
-            20,
-            samePaint);
+            8,
+            samplePaint);
       }
+
       void paintLine(
           PoseLandmarkType type1, PoseLandmarkType type2, Paint paintType) {
         final PoseLandmark joint1 = pose.landmarks[type1]!;
@@ -54,6 +62,18 @@ class PosePainter extends CustomPainter {
                 translateY(joint2.y, rotation, size, absoluteImageSize)),
             paintType);
       }
+
+      paintCircle(PoseLandmarkType.leftShoulder);
+      paintCircle(PoseLandmarkType.rightShoulder);
+      paintCircle(PoseLandmarkType.leftElbow);
+      paintCircle(PoseLandmarkType.rightElbow);
+      paintCircle(PoseLandmarkType.leftWrist);
+      paintCircle(PoseLandmarkType.rightWrist);
+      paintCircle(PoseLandmarkType.leftHip);
+      paintCircle(PoseLandmarkType.rightHip);
+      paintCircle(PoseLandmarkType.leftAnkle);
+      paintCircle(PoseLandmarkType.rightAnkle);
+
 
       //Draw Sample arms
       paintLine(
@@ -85,43 +105,110 @@ class PosePainter extends CustomPainter {
   
     
     for (final pose in poses) {
+      void isCheckAll() {
+        print(checkAll);
+        // bool allsame = true;
+        // for(var c in checkAll) {
+        //   allSame = c;
+        // }
+        // if(allSame) {
+        if(checkAll[1] && checkAll[3]) {
+          context.read<CheckPose>().changePose();
+        }
+      }
+
+      bool isSame(PoseLandmark s, PoseLandmark j) {
+        bool x = false;
+        bool y = false;
+
+        if(j.x + 50 >= s.x && j.x - 50 <= s.x){
+          x = true;
+        }
+        if(j.y + 50 >= s.y && j.y - 50 <= s.y){
+          y = true;
+        }
+
+        if(x && y) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+
+      void paintCircle(
+          PoseLandmarkType type, int idx) {
+        final PoseLandmark sample_joint1 = sample.landmarks[type]!;
+        final PoseLandmark joint1 = pose.landmarks[type]!;
+        // print(type.toString() + ": "+ sample_joint1.x.toString() + "= " + joint1.x.toString());
+
+        if(isSame(sample_joint1, joint1)) {
+          checkAll[idx] = true;
+          isCheckAll();
+          print(checkAll);
+        }
+
+        canvas.drawCircle(
+            Offset(translateX(joint1.x, rotation, size, absoluteImageSize),
+                translateY(joint1.y, rotation, size, absoluteImageSize)),
+            8,
+            isSame(sample_joint1, joint1) ? samePaint : afterPaint);
+      }
+
       void paintLine(
-          PoseLandmarkType type1, PoseLandmarkType type2, Paint paintType) {
+          PoseLandmarkType type1, PoseLandmarkType type2) {
+        final PoseLandmark sample_joint1 = sample.landmarks[type1]!;
+        final PoseLandmark sample_joint2 = sample.landmarks[type2]!;
         final PoseLandmark joint1 = pose.landmarks[type1]!;
         final PoseLandmark joint2 = pose.landmarks[type2]!;
+
+        bool isBothSame = false;
+        if(isSame(sample_joint1, joint1) && isSame(sample_joint2, joint2)) {
+          isBothSame = true;
+        }
         canvas.drawLine(
             Offset(translateX(joint1.x, rotation, size, absoluteImageSize),
                 translateY(joint1.y, rotation, size, absoluteImageSize)),
             Offset(translateX(joint2.x, rotation, size, absoluteImageSize),
                 translateY(joint2.y, rotation, size, absoluteImageSize)),
-            paintType);
+            isBothSame ? samePaint : afterPaint);
       }
+
+      paintCircle(PoseLandmarkType.leftShoulder, 0);
+      paintCircle(PoseLandmarkType.rightShoulder, 1);
+      paintCircle(PoseLandmarkType.leftElbow, 2);
+      paintCircle(PoseLandmarkType.rightElbow, 3);
+      paintCircle(PoseLandmarkType.leftWrist, 4);
+      paintCircle(PoseLandmarkType.rightWrist, 5);
+      paintCircle(PoseLandmarkType.leftHip, 6);
+      paintCircle(PoseLandmarkType.rightHip, 7);
+      paintCircle(PoseLandmarkType.leftAnkle, 8);
+      paintCircle(PoseLandmarkType.rightAnkle,  9);
+
+
       //Draw arms
       paintLine(
-          PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder, afterPaint);
+          PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder);
       paintLine(
-          PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow, afterPaint);
+          PoseLandmarkType.leftShoulder, PoseLandmarkType.leftElbow);
       paintLine(
-          PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder, afterPaint);
+          PoseLandmarkType.leftShoulder, PoseLandmarkType.rightShoulder);
 
       paintLine(
-          PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist, afterPaint);
-      paintLine(PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow,
-          afterPaint);
+          PoseLandmarkType.leftElbow, PoseLandmarkType.leftWrist);
+      paintLine(PoseLandmarkType.rightShoulder, PoseLandmarkType.rightElbow);
       paintLine(
-          PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist, afterPaint);
+          PoseLandmarkType.rightElbow, PoseLandmarkType.rightWrist);
 
       //Draw Body
       paintLine(
-          PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip, afterPaint);
-      paintLine(PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip,
-          afterPaint);
+          PoseLandmarkType.leftShoulder, PoseLandmarkType.leftHip);
+      paintLine(PoseLandmarkType.rightShoulder, PoseLandmarkType.rightHip);
 
       //Draw legs
       paintLine(
-          PoseLandmarkType.leftHip, PoseLandmarkType.leftAnkle, afterPaint);
+          PoseLandmarkType.leftHip, PoseLandmarkType.leftAnkle);
       paintLine(
-          PoseLandmarkType.rightHip, PoseLandmarkType.rightAnkle, afterPaint);
+          PoseLandmarkType.rightHip, PoseLandmarkType.rightAnkle);
     }
   }
 

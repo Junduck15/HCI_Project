@@ -1,7 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'before_pose_detector.dart';
 import 'result.dart';
 import 'sports_expert.dart';
+import 'package:google_ml_kit_example/sports_expert.dart';
+import 'package:provider/provider.dart';
+import 'before_pose_detector.dart';
+import 'cameraView.dart';
+import 'check_provider.dart';
+import 'vision_detector_views/detector_views.dart';
 
 class Home extends StatelessWidget {
   List<SportsExpert> home_sports_experts = [
@@ -17,20 +25,15 @@ class Home extends StatelessWidget {
               'Fully sit down\nPress your heels to the ground\nStraighten your back\nKeep lower back neutral',
           posetureImage: 'assets/poses/squat2.jpeg'),
     ]),
-    SportsExpert(
-        name: 'Shoulder Press',
-        image: 'assets/poses/shoulder_press.jpeg',
+    SportsExpert(name: 'Shoulder Press', image: 'assets/poses/shoulder_press.jpeg',
         postures: [
-          Posture(
-              posture: 'Start Position',
-              postureComment:
-                  'Lift your arms and make and make 90 degrees with elbow\nStraighten your back',
-              posetureImage: 'assets/poses/sp3.jpeg'),
-          Posture(
-              posture: 'Action Pose',
-              postureComment:
-                  'Lift your arms\nMake two arms parallel to each other\nRepeat the action',
-              posetureImage: 'assets/poses/sp4.jpeg'),
+      Posture(posture: 'Start Position', postureComment: 'Lift your arms and make and make 90 degrees with elbow\nStraighten your back', posetureImage: 'assets/poses/sp7.jpeg'),
+      Posture(posture: 'Action Pose', postureComment: 'Lift your arms\nMake two arms parallel to each other\nRepeat the action', posetureImage: 'assets/poses/sp8.jpeg'),
+        ]),
+    SportsExpert(name: 'Push up',image: 'assets/poses/pushup.jpeg',
+        postures: [
+      Posture(posture: 'Start Position', postureComment: 'First lay down on the ground\nWiden your hands to your shoulder-width\nStraighten your back', posetureImage: 'assets/poses/pu1.jpeg'),
+      Posture(posture: 'Action Pose', postureComment: 'Push your hands to go up\nFully stretch your elbow\nStraighten your back and legs\nRepeat the action', posetureImage: 'assets/poses/pushup2.jpeg'),
         ]),
     SportsExpert(name: 'Push up', image: 'assets/poses/pushup.jpeg', postures: [
       Posture(
@@ -48,16 +51,14 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
-        leading: ElevatedButton(
-            onPressed: () {
-             Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Result()));
-            },
-            child: Text('Result')),
+        
+     
         automaticallyImplyLeading: false,
         centerTitle: false,
+        backgroundColor: Colors.white,
         title: const Text(
           'Pocket Trainer',
           style: TextStyle(color: Colors.black),
@@ -76,6 +77,7 @@ class Home extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
+                  context.read<CheckPose>().initState();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -122,7 +124,7 @@ class Home extends StatelessWidget {
       //       icon: Icon(Icons.person_outline, size: 20,),
       //     ),
       //   ],
-      // ),
+      // ),//
     );
   }
 }

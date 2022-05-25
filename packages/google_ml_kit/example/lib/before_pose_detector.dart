@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -97,18 +98,18 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
                         ),
                         Center(
                           child: Container(
-                              height: 270,
-                              width: 190,
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(20), // Image border
-                                child: SizedBox.fromSize(
-                                  size: Size.fromRadius(48), // Image radius
-                                  child: Image(
-                                      image: AssetImage(item.posetureImage),
-                                      fit: BoxFit.fill),
-                                ),
-                              )),
+                            height: 270,
+                            width: 190,
+                            
+                             child: ClipRRect(
+                               borderRadius: BorderRadius.circular(20), // Image border
+                               child: SizedBox.fromSize(
+                                 size: Size.fromRadius(48), // Image radius
+                                 child:  Image(image: AssetImage(item.posetureImage), fit: BoxFit.fill),
+                               ),
+                             )
+
+                          ),
                         ), // image part
                         SizedBox(
                           height: 25,
@@ -183,8 +184,8 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
     );
   }
 
-  Future<void> processImages() async {
-    for (var p in widget.sportsExpert.postures!) {
+  Future<void> processImages() async{
+    for(var p in widget.sportsExpert.postures!) {
       print('print poses: ' + p.posetureImage);
       String imagePath = p.posetureImage;
       imagePath = imagePath.substring(13);
@@ -195,15 +196,20 @@ class _BeforePoseDetectorState extends State<BeforePoseDetector> {
       //
       File file = File('$path/$imagePath');
       print('file1: ' + file.path);
+
+      await file.writeAsBytes(bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes)).whenComplete(() async{
+        print('file2: ' + file.path);
+        final inputImage = InputImage.fromFile(file);
+        List<Pose> _poses = await _imagePoseDetector.processImage(inputImage);
+
+        processedImage.add(_poses);
+      });
+      // print('file2: ' + file.path);
       //
-      await file.writeAsBytes(
-          bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
-      print('file2: ' + file.path);
-
-      final inputImage = InputImage.fromFile(file);
-      List<Pose> _poses = await _imagePoseDetector.processImage(inputImage);
-
-      processedImage.add(_poses);
+      // final inputImage = InputImage.fromFile(file);
+      // List<Pose> _poses = await _imagePoseDetector.processImage(inputImage);
+      //
+      // processedImage.add(_poses);
     }
     print('Process Image done');
     print(processedImage.length);
